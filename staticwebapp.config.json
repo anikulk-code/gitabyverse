@@ -1,0 +1,9 @@
+{
+  "globalHeaders": {
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["*.{css,scss,js,png,gif,ico,jpg,svg,woff,woff2,ttf,eot,json}"]
+  }
+}

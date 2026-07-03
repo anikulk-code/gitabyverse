@@ -1,0 +1,49 @@
+.App {
+  min-height: 100vh;
+}
+
+.App-header {
+  background: linear-gradient(135deg, #2c1810 0%, #4a3728 100%);
+  padding: 2rem 1.5rem;
+  color: #fffdf9;
+  text-align: center;
+}
+
+.App-header h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.25rem;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.02em;
+}
+
+.App-header p {
+  font-size: 1.05rem;
+  opacity: 0.92;
+  margin-bottom: 0.75rem;
+}
+
+.App-domain {
+  display: inline-block;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.App-main {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.App-source-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #f0dcc8;
+  text-decoration: none;
+}
+
+.App-source-link:hover {
+  text-decoration: underline;
+}
