@@ -29,6 +29,18 @@ const DEFAULT_OUTPUT_PATH = path.join(
   "gita-map.json",
 );
 
+const EXCLUDED_SWAMI_NAMES = [
+  "nikhileswarananda",
+  "nikhileshwarananda",
+  "tattwamayananda",
+];
+
+function isExcludedSwami(swami) {
+  if (!swami) return false;
+  const normalized = swami.toLowerCase().replace(/^swami\s+/i, "");
+  return EXCLUDED_SWAMI_NAMES.some((name) => normalized.includes(name));
+}
+
 const CHAPTER_NAMES = {
   1: "Arjuna's despondency",
   2: "Self-knowledge and steady wisdom",
@@ -181,7 +193,7 @@ function mergeOtherLectures(otherData) {
   const teachers = new Map();
 
   function addTeacher(swami, language) {
-    if (!swami) return;
+    if (!swami || isExcludedSwami(swami)) return;
     const key = `${swami}::${language || ""}`;
     if (!teachers.has(key)) {
       teachers.set(key, { swami, language: language || null });
@@ -201,6 +213,8 @@ function mergeOtherLectures(otherData) {
   }
 
   for (const series of otherData?.series || []) {
+    if (isExcludedSwami(series.swami)) continue;
+
     const meta = {
       swami: series.swami,
       language: series.language,
@@ -222,6 +236,8 @@ function mergeOtherLectures(otherData) {
   }
 
   for (const series of otherData?.chapterLevelSeries || []) {
+    if (isExcludedSwami(series.swami)) continue;
+
     const meta = {
       swami: series.swami,
       language: series.language,
