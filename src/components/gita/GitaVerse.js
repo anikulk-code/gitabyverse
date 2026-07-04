@@ -7,8 +7,9 @@ import {
   verseKey,
 } from '../../context/GitaDataContext';
 import { useGitaTeacherFilter } from '../../hooks/useGitaTeacherFilter';
-import { GITA_HOME, gitaChapterPath, gitaVersePath } from '../../gitaPaths';
+import { GITA_HOME, gitaChapterPath } from '../../gitaPaths';
 import GitaLectureList from './GitaLectureList';
+import { GitaBottomNav, GitaUpNav } from './GitaPageNav';
 import './Gita.css';
 
 function GitaVerse() {
@@ -46,21 +47,18 @@ function GitaVerse() {
   if (!entry) {
     return (
       <div className="gita-page">
-        <nav className="gita-breadcrumb">
-          <Link to={withTeacherQuery(GITA_HOME)}>Home</Link>
-          <span aria-hidden="true"> / </span>
-          <Link to={withTeacherQuery(gitaChapterPath(chapter))}>Chapter {chapter}</Link>
-          <span aria-hidden="true"> / </span>
-          <span>Verse {verse}</span>
-        </nav>
+        <GitaUpNav chapter={chapter} withTeacherQuery={withTeacherQuery} />
         <div className="gita-coming-soon">
           <h2>{chapter}.{verse}</h2>
           <p>
             Swamiji&apos;s lecture for this verse is not mapped yet. Check back
             as the series continues.
           </p>
-          <Link to={withTeacherQuery(gitaChapterPath(chapter))} className="gita-back-link">
-            Back to Chapter {chapter}
+          <Link
+            to={withTeacherQuery(gitaChapterPath(chapter))}
+            className="gita-nav-button"
+          >
+            ← Chapter {chapter}
           </Link>
         </div>
       </div>
@@ -78,13 +76,10 @@ function GitaVerse() {
 
   return (
     <div className="gita-page">
-      <nav className="gita-breadcrumb">
-        <Link to={withTeacherQuery(GITA_HOME)}>Home</Link>
-        <span aria-hidden="true"> / </span>
-        <Link to={withTeacherQuery(gitaChapterPath(chapter))}>Chapter {chapter}</Link>
-        <span aria-hidden="true"> / </span>
-        <span>Verse {verse}</span>
-      </nav>
+      <GitaUpNav chapter={chapter} withTeacherQuery={withTeacherQuery} />
+      <p className="gita-verse-location">
+        Chapter {chapter} · Verse {verse}
+      </p>
 
       <header className="gita-header gita-header-verse">
         <p className="gita-kicker">
@@ -128,30 +123,12 @@ function GitaVerse() {
         otherLectures={otherLectures}
       />
 
-      <div className="gita-verse-nav">
-        {verse > 1 && (
-          <Link
-            to={withTeacherQuery(gitaVersePath(chapter, verse - 1))}
-            className="gita-nav-link"
-          >
-            ← {chapter}.{verse - 1}
-          </Link>
-        )}
-        <Link
-          to={withTeacherQuery(gitaChapterPath(chapter))}
-          className="gita-nav-link gita-nav-center"
-        >
-          Chapter {chapter}
-        </Link>
-        {verse < verseCount && (
-          <Link
-            to={withTeacherQuery(gitaVersePath(chapter, verse + 1))}
-            className="gita-nav-link"
-          >
-            {chapter}.{verse + 1} →
-          </Link>
-        )}
-      </div>
+      <GitaBottomNav
+        withTeacherQuery={withTeacherQuery}
+        chapter={chapter}
+        prevVerse={verse > 1 ? verse - 1 : null}
+        nextVerse={verse < verseCount ? verse + 1 : null}
+      />
     </div>
   );
 }

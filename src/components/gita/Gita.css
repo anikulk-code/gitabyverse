@@ -315,6 +315,53 @@
   line-height: 1.6;
 }
 
+.gita-verse-up-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.gita-verse-location {
+  margin: 0 0 1.25rem;
+  text-align: center;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8a735f;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.gita-nav-button {
+  display: inline-block;
+  padding: 0.6rem 1.15rem;
+  border: 1px solid #c9a88e;
+  border-radius: 999px;
+  color: #8b2635;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: #fffdf9;
+  font-family: Georgia, 'Times New Roman', serif;
+  transition: background 0.15s ease;
+}
+
+.gita-nav-button:hover {
+  background: #f5ebe0;
+  text-decoration: none;
+}
+
+.gita-nav-button-secondary {
+  font-weight: 500;
+  color: #6b5344;
+  border-color: #d9c8b8;
+  background: #faf6f0;
+}
+
+.gita-nav-button-secondary:hover {
+  background: #f0e6da;
+}
+
 .gita-back-link {
   color: #8b2635;
   text-decoration: none;
@@ -327,12 +374,19 @@
 
 .gita-verse-nav {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid #e8ddd0;
+}
+
+.gita-verse-nav-primary,
+.gita-verse-nav-verses {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
 }
 
 .gita-nav-link {
@@ -488,8 +542,15 @@
 }
 
 @media (max-width: 600px) {
-  .gita-verse-nav {
-    flex-direction: column;
+  .gita-verse-up-nav,
+  .gita-verse-nav-primary,
+  .gita-verse-nav-verses {
+    justify-content: stretch;
+  }
+
+  .gita-verse-up-nav .gita-nav-button,
+  .gita-verse-nav-primary .gita-nav-button {
+    flex: 1 1 calc(50% - 0.35rem);
     text-align: center;
   }
 }

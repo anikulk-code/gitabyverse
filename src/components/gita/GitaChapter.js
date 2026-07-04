@@ -13,6 +13,7 @@ import {
   formatLectureHeading,
   GitaLectureCard,
 } from './GitaLectureList';
+import { GitaBottomNav, GitaUpNav } from './GitaPageNav';
 import './Gita.css';
 
 function GitaChapterOtherLectures({ chapter, lectures }) {
@@ -65,11 +66,8 @@ function GitaChapter() {
 
   return (
     <div className="gita-page">
-      <nav className="gita-breadcrumb">
-        <Link to={withTeacherQuery(GITA_HOME)}>Home</Link>
-        <span aria-hidden="true"> / </span>
-        <span>Chapter {chapter}</span>
-      </nav>
+      <GitaUpNav withTeacherQuery={withTeacherQuery} />
+      <p className="gita-verse-location">Chapter {chapter}</p>
 
       <header className="gita-header">
         <p className="gita-kicker">Chapter {chapter}</p>
@@ -109,6 +107,8 @@ function GitaChapter() {
         chapter={chapter}
         lectures={chapterOtherLectures}
       />
+
+      <GitaBottomNav withTeacherQuery={withTeacherQuery} />
     </div>
   );
 }

@@ -21,6 +21,8 @@ const DEFAULT_CACHE_PATH =
   "/Users/aniruddhakulkarni/Documents/CodexProjects/gita-verse-cache.json";
 const DEFAULT_OTHER_LECTURES_PATH =
   "/Users/aniruddhakulkarni/Documents/CodexProjects/rk-order-gita-lectures-by-language.json";
+const DEFAULT_BANANJE_LECTURES_PATH =
+  "/Users/aniruddhakulkarni/Documents/CodexProjects/bannanje-gita-lectures.json";
 const DEFAULT_OUTPUT_PATH = path.join(
   __dirname,
   "..",
@@ -67,6 +69,33 @@ function loadJson(filePath) {
     throw new Error(`Missing input file: ${filePath}`);
   }
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+function loadOtherLectureSources(paths) {
+  const merged = {
+    generatedAt: new Date().toISOString().slice(0, 10),
+    description: "Merged other-teacher Gita lecture sources.",
+    series: [],
+    chapterLevelSeries: [],
+    sources: [],
+  };
+
+  for (const filePath of paths) {
+    if (!fs.existsSync(filePath)) {
+      console.warn(`Other lectures file not found: ${filePath}`);
+      continue;
+    }
+    const data = loadJson(filePath);
+    merged.series.push(...(data.series || []));
+    merged.chapterLevelSeries.push(...(data.chapterLevelSeries || []));
+    merged.sources.push({
+      generatedAt: data.generatedAt,
+      description: data.description,
+      path: filePath,
+    });
+  }
+
+  return merged.series.length || merged.chapterLevelSeries.length ? merged : null;
 }
 
 function pickLecture(verseKey, lectures) {
@@ -345,6 +374,7 @@ function buildSlimMap(mapData, cacheData, otherData) {
       ? {
           generatedAt: otherData.generatedAt,
           description: otherData.description,
+          sources: otherData.sources || null,
         }
       : null,
     chapterVerseCounts: mapData.chapterVerseCounts,
@@ -360,14 +390,13 @@ function main() {
   const mapPath = process.env.GITA_MAP_PATH || DEFAULT_MAP_PATH;
   const cachePath = process.env.GITA_CACHE_PATH || DEFAULT_CACHE_PATH;
   const otherPath = process.env.GITA_OTHER_LECTURES_PATH || DEFAULT_OTHER_LECTURES_PATH;
+  const bannanjePath =
+    process.env.GITA_BANANJE_LECTURES_PATH || DEFAULT_BANANJE_LECTURES_PATH;
   const outputPath = process.env.GITA_OUTPUT_PATH || DEFAULT_OUTPUT_PATH;
 
   const mapData = loadJson(mapPath);
   const cacheData = loadJson(cachePath);
-  const otherData = fs.existsSync(otherPath) ? loadJson(otherPath) : null;
-  if (!otherData) {
-    console.warn(`Other lectures file not found: ${otherPath}`);
-  }
+  const otherData = loadOtherLectureSources([otherPath, bannanjePath]);
   const slim = buildSlimMap(mapData, cacheData, otherData);
 
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
