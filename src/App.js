@@ -1,6 +1,11 @@
 import React from 'react';
 import './App.css';
 import GitaRoutes from './components/gita/GitaRoutes';
+import {
+  CONTACT_EMAIL,
+  contactMailto,
+  featureRequestMailto,
+} from './siteContact';
 
 function App() {
   return (
@@ -25,6 +30,25 @@ function App() {
       <main className="App-main">
         <GitaRoutes />
       </main>
+
+      <footer className="App-footer">
+        <section className="App-contact">
+          <h2 className="App-contact-title">Contact</h2>
+          <p className="App-contact-text">
+            Questions, feedback, or ideas for the site? Send an email — we read
+            every message.
+          </p>
+          <div className="App-contact-links">
+            <a className="App-contact-link" href={contactMailto()}>
+              Email us
+            </a>
+            <a className="App-contact-link" href={featureRequestMailto()}>
+              Suggest a feature
+            </a>
+          </div>
+          <p className="App-contact-email">{CONTACT_EMAIL}</p>
+        </section>
+      </footer>
     </div>
   );
 }

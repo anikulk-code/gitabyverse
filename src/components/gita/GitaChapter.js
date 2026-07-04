@@ -9,6 +9,10 @@ import {
 } from '../../context/GitaDataContext';
 import { useGitaTeacherFilter } from '../../hooks/useGitaTeacherFilter';
 import { GITA_HOME, gitaVersePath } from '../../gitaPaths';
+import {
+  formatLectureHeading,
+  GitaLectureCard,
+} from './GitaLectureList';
 import './Gita.css';
 
 function GitaChapterOtherLectures({ chapter, lectures }) {
@@ -25,26 +29,11 @@ function GitaChapterOtherLectures({ chapter, lectures }) {
       </p>
       <div className="gita-lecture-list">
         {lectures.map((lecture) => (
-          <article
+          <GitaLectureCard
             key={`${lecture.videoId}-${lecture.swami}`}
-            className="gita-lecture-card gita-lecture-card-compact"
-          >
-            <p className="gita-lecture-speaker">
-              {lecture.swami}
-              {lecture.language ? ` · ${lecture.language}` : ''}
-            </p>
-            <p className="gita-lecture-title">{lecture.title}</p>
-            {lecture.url && (
-              <a
-                className="gita-source-link"
-                href={lecture.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Open on YouTube
-              </a>
-            )}
-          </article>
+            lecture={lecture}
+            heading={formatLectureHeading(lecture)}
+          />
         ))}
       </div>
     </section>

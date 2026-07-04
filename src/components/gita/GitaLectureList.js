@@ -6,7 +6,12 @@ function youtubeEmbedUrl(videoId) {
   return `https://www.youtube.com/embed/${videoId}?rel=0`;
 }
 
-function GitaLectureCard({ lecture, heading }) {
+export function formatLectureHeading(lecture) {
+  if (!lecture?.swami) return null;
+  return `${lecture.swami}${lecture.language ? ` · ${lecture.language}` : ''}`;
+}
+
+export function GitaLectureCard({ lecture, heading }) {
   if (!lecture?.videoId) return null;
 
   return (
@@ -22,28 +27,6 @@ function GitaLectureCard({ lecture, heading }) {
           allowFullScreen
         />
       </div>
-      {lecture.url && (
-        <a
-          className="gita-source-link"
-          href={lecture.url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Open on YouTube
-        </a>
-      )}
-    </article>
-  );
-}
-
-function GitaOtherLectureLink({ lecture }) {
-  return (
-    <article className="gita-lecture-card gita-lecture-card-compact">
-      <p className="gita-lecture-speaker">
-        {lecture.swami}
-        {lecture.language ? ` · ${lecture.language}` : ''}
-      </p>
-      <p className="gita-lecture-title">{lecture.title}</p>
       {lecture.url && (
         <a
           className="gita-source-link"
@@ -75,9 +58,10 @@ function GitaLectureList({ primaryLecture, otherLectures }) {
           <h3 className="gita-section-label">Other teachers on this verse</h3>
           <div className="gita-lecture-list">
             {otherLectures.map((lecture) => (
-              <GitaOtherLectureLink
+              <GitaLectureCard
                 key={`${lecture.videoId}-${lecture.swami}`}
                 lecture={lecture}
+                heading={formatLectureHeading(lecture)}
               />
             ))}
           </div>
