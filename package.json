@@ -11,9 +11,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run build:sitemap && react-scripts build",
     "build:gita-data": "node scripts/build-gita-data.js",
     "build:bannanje-data": "node scripts/build-bannanje-gita-source.js",
+    "build:sitemap": "node scripts/generate-sitemap.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

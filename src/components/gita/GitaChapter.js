@@ -8,6 +8,8 @@ import {
   useGitaData,
 } from '../../context/GitaDataContext';
 import { useGitaTeacherFilter } from '../../hooks/useGitaTeacherFilter';
+import { usePageSeo } from '../../hooks/usePageSeo';
+import { chapterPageSeo } from '../../siteSeo';
 import { GITA_HOME, gitaVersePath } from '../../gitaPaths';
 import {
   formatLectureHeading,
@@ -46,6 +48,26 @@ function GitaChapter() {
   const chapter = parseInt(chapterParam, 10);
   const { data, loading, error } = useGitaData();
   const { withTeacherQuery } = useGitaTeacherFilter();
+  const verseCount = data ? getChapterVerseCount(data, chapter) : 0;
+  const chapterName = data ? getChapterName(data, chapter) : '';
+
+  usePageSeo(
+    () => {
+      if (
+        Number.isNaN(chapter) ||
+        chapter < 1 ||
+        chapter > 18 ||
+        loading ||
+        error ||
+        !data
+      ) {
+        return;
+      }
+
+      chapterPageSeo(chapter, chapterName, verseCount);
+    },
+    [chapter, chapterName, verseCount, loading, error, data],
+  );
 
   if (Number.isNaN(chapter) || chapter < 1 || chapter > 18) {
     return <Navigate to={withTeacherQuery(GITA_HOME)} replace />;
@@ -59,8 +81,6 @@ function GitaChapter() {
     return <div className="gita-status gita-status-error">{error}</div>;
   }
 
-  const verseCount = getChapterVerseCount(data, chapter);
-  const chapterName = getChapterName(data, chapter);
   const chapterOtherLectures = getChapterOtherLectures(data, chapter);
   const verses = Array.from({ length: verseCount }, (_, index) => index + 1);
 

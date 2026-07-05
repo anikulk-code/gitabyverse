@@ -7,6 +7,8 @@ import {
   verseKey,
 } from '../../context/GitaDataContext';
 import { useGitaTeacherFilter } from '../../hooks/useGitaTeacherFilter';
+import { usePageSeo } from '../../hooks/usePageSeo';
+import { versePageSeo } from '../../siteSeo';
 import { GITA_HOME, gitaChapterPath } from '../../gitaPaths';
 import GitaLectureList from './GitaLectureList';
 import { GitaBottomNav, GitaUpNav } from './GitaPageNav';
@@ -18,6 +20,36 @@ function GitaVerse() {
   const verse = parseInt(verseParam, 10);
   const { data, loading, error } = useGitaData();
   const { withTeacherQuery } = useGitaTeacherFilter();
+  const verseCount = data ? getChapterVerseCount(data, chapter) : 0;
+  const entry = data?.verseMap?.[verseKey(chapter, verse)];
+  const chapterName = data ? getChapterName(data, chapter) : '';
+
+  usePageSeo(
+    () => {
+      if (
+        Number.isNaN(chapter) ||
+        Number.isNaN(verse) ||
+        chapter < 1 ||
+        chapter > 18 ||
+        loading ||
+        error ||
+        !data ||
+        verse < 1 ||
+        verse > verseCount
+      ) {
+        return;
+      }
+
+      versePageSeo({
+        chapter,
+        verse,
+        chapterName,
+        translationText: entry?.translation?.text,
+        mapped: Boolean(entry),
+      });
+    },
+    [chapter, verse, chapterName, entry, loading, error, data, verseCount],
+  );
 
   if (
     Number.isNaN(chapter) ||
@@ -28,7 +60,6 @@ function GitaVerse() {
     return <Navigate to={withTeacherQuery(GITA_HOME)} replace />;
   }
 
-  const verseCount = data ? getChapterVerseCount(data, chapter) : 0;
   if (verse < 1 || verse > verseCount) {
     return <Navigate to={withTeacherQuery(gitaChapterPath(chapter))} replace />;
   }
@@ -40,9 +71,6 @@ function GitaVerse() {
   if (error) {
     return <div className="gita-status gita-status-error">{error}</div>;
   }
-
-  const entry = data.verseMap?.[verseKey(chapter, verse)];
-  const chapterName = getChapterName(data, chapter);
 
   if (!entry) {
     return (
